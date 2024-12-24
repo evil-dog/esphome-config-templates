@@ -1,5 +1,5 @@
 substitutions:
-  name: lumary-rgbai-recessed
+  name: lumary-rgbai-rec
   friendly_name: Lumary RGBAI Recessed 6in
 
 esphome:
@@ -68,6 +68,3 @@ light:
               it[i] = it[i - 1].get();
             }
             it[0] = Color::random_color();
-
-            // it.range(0, 50) = Color::BLACK;
-            // it.all().fade_to_black(10);
