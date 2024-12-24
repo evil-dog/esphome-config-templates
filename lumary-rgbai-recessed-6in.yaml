@@ -1,0 +1,73 @@
+substitutions:
+  name: lumary-rgbai-recessed
+  friendly_name: Lumary RGBAI Recessed 6in
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+  name_add_mac_suffix: true
+  project:
+    name: evil-dog.lumary-rgbai-recessed-6in
+    version: "1.0"
+
+bk72xx:
+  board: cbu
+
+logger:
+web_server:
+captive_portal:
+mdns:
+api:
+
+ota:
+  platform: esphome
+
+wifi:
+  ap:
+
+dashboard_import:
+  package_import_url: github://evil-dog/esphome-config-templates/lumary-rgbai-recessed-6in.yaml@main
+  import_full_config: True
+
+text_sensor:
+  - platform: libretiny
+    version:
+      name: LibreTiny Version
+
+output:
+  - platform: libretiny_pwm
+    id: output_cold
+    pin: P8
+  - platform: libretiny_pwm
+    id: output_warm
+    pin: P7
+
+light:
+  - platform: cwww
+    id: light_cwww
+    name: Light
+    cold_white_color_temperature: 6500 K
+    warm_white_color_temperature: 2700 K
+    cold_white: output_cold
+    warm_white: output_warm
+  - platform: beken_spi_led_strip
+    rgb_order: RGB
+    pin: P16
+    num_leds: 52
+    chipset: SK6812
+    name: RGB Strip
+    id: rgb_strip
+    effects:
+      - addressable_twinkle:
+      - addressable_fireworks:
+      - addressable_lambda:
+          name: Example Color Wipe
+          update_interval: 16ms
+          lambda: |-
+            for (int i = it.size() -1; i > 0; i--) {
+              it[i] = it[i - 1].get();
+            }
+            it[0] = Color::random_color();
+
+            // it.range(0, 50) = Color::BLACK;
+            // it.all().fade_to_black(10);
